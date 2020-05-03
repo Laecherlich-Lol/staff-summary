@@ -1,13 +1,13 @@
 import xlrd
 import tkinter
-import ultis
+import utils
 import create_table
 
 
 window = tkinter.Tk()
 window.title('选择文件')
 window.geometry('500x300')
-init = ultis.Features(window)
+init = utils.Features(window)
 select_file_button = tkinter.Button(
     window,
     text='选择文件',
