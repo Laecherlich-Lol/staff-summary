@@ -5,6 +5,8 @@ import utils
 import create_table
 
 
+staff = 'O'
+month = 1
 window = tkinter.Tk()
 window.title('选择文件')
 window.geometry('500x300')
@@ -21,31 +23,37 @@ accept_opinions = tkinter.Button(
     font=('Arial', 12),
     command=init.finish
 )
-t1 = tkinter.StringVar()
-t2 = ttk.Combobox(window, 
-                            values=[
-                                    "January", 
-                                    "February",
-                                    "March",
-                                    "April"])
 
-def callbackFunc(event):
-     print("New Element Selected")
-     print(t2.get())
+t1 = ttk.Combobox(window,
+                  values=['o', 'd', 'p'])
+t2 = ttk.Combobox(window,
+                  values=[months for months in range(1, 13)])
 
 
-t2.bind("<<ComboboxSelected>>", callbackFunc)
+def callbackt1(event):
+    global staff
+    staff = t1.get()
 
-text1 = init.put_in(t1)
+
+def callbackt2(event):
+     # print("New Element Selected")
+     global month
+     month = t2.get()
+
+
+t1.bind("<<ComboboxSelected>>", callbackt1)
+t2.bind("<<ComboboxSelected>>", callbackt2)
+
 tkinter.Label(window, text='员工:', font=('Arial', 14)).place(x=10, y=30)
 tkinter.Label(window, text='月份:', font=('Arial', 14)).place(x=10, y=60)
 select_file_button.pack()
-text1.pack()
+t1.pack()
 t2.pack()
 accept_opinions.pack()
 window.mainloop()
+print(staff, month)
 data = xlrd.open_workbook(init.judge())
-table = data.sheets()[int(t2.get())-1]
-new_table = create_table.Create(table, t1.get(), t2.get())
+table = data.sheets()[int(month)-1]
+new_table = create_table.Create(table, staff, month)
 new_table.init_table()
 new_table.creating()
