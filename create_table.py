@@ -79,7 +79,8 @@ class Create:
                     self.two_rows = True
                 break
         while self.table.cell(0, self.col).value != 'Monate Stunden':
-            dates = xlrd.xldate_as_tuple(self.table.cell(0, self.col).value, 0)
+            # print(self.table.cell(0, self.col).value)  #TODO: fix empty column issue
+            dates = xlrd.xldate_as_tuple(float(self.table.cell(0, self.col).value), 0)
             date = str(dates[2]) + '.' + str(dates[1]) + '.' + str(dates[0])
             self.worksheet.write(self.new_table_row, 0, date)
             if self.table.cell(self.row, self.col).value in self.true_status:
