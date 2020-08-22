@@ -18,7 +18,7 @@ class Features:
     def put_in(self, strVar):
         return tkinter.Entry(self.interface, textvariable=strVar, show=None, font=('Arial', 14))
 
-    def judge(self):
+    def get_filename(self):
         return self.interface.filename if self.interface.filename is not None else ''
 
 

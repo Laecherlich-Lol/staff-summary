@@ -1,59 +1,59 @@
 import xlrd
 import tkinter
-from tkinter import ttk
 import utils
 import create_table
+from SelectionBox import SelectionBox
 
 
-staff = 'O'
-month = 1
-window = tkinter.Tk()
-window.title('选择文件')
-window.geometry('500x300')
-init = utils.Features(window)
-select_file_button = tkinter.Button(
-    window,
-    text='选择文件',
-    font=('Arial', 12),
-    command=init.get_files
-)
-accept_opinions = tkinter.Button(
-    window,
-    text='确定',
-    font=('Arial', 12),
-    command=init.finish
-)
+def init_window(title, geometry):
+    window = tkinter.Tk()
+    window.title(title)
+    window.geometry(geometry)
 
-t1 = ttk.Combobox(window,
-                  values=['Olaf Thomsen', 'Manfred Reyelt', 'Doris Rüdiger'])
-t2 = ttk.Combobox(window,
-                  values=[months for months in range(1, 13)])
+    return window
 
 
-def callbackt1(event):
-    global staff
-    staff = t1.get()
+def main():
+
+    window = init_window("Staff Summary", '500x300')
+
+    init = utils.Features(window)
+
+    select_file_button = tkinter.Button(
+        window,
+        text='选择文件',
+        font=('Arial', 12),
+        command=init.get_files
+    )
+    select_file_button.pack()
+
+    staff_selection = SelectionBox(window, "Staff Name", dict(x=125, y=30))
+    month_selection = SelectionBox(window, "Month", dict(x=125, y=10))
+
+    staff_selection.set_values(['Olaf Thomsen', 'Manfred Reyelt', 'Doris Rüdiger'])
+    month_selection.set_values([months for months in range(1, 13)])
 
 
-def callbackt2(event):
-     # print("New Element Selected")
-     global month
-     month = t2.get()
+    accept_opinions = tkinter.Button(
+        window,
+        text='确定',
+        font=('Arial', 12),
+        command=init.finish
+    )
+    accept_opinions.pack()
+
+    window.mainloop()
+
+    data = xlrd.open_workbook(init.get_filename())
+
+    staff = staff_selection.selected
+    month = month_selection.selected
+    table = data.sheets()[int(month)-1]
+
+    new_table = create_table.Create(table, staff, month)
+    new_table.init_table()
+    new_table.creating()
 
 
-t1.bind("<<ComboboxSelected>>", callbackt1)
-t2.bind("<<ComboboxSelected>>", callbackt2)
-
-tkinter.Label(window, text='员工:', font=('Arial', 14)).place(x=10, y=30)
-tkinter.Label(window, text='月份:', font=('Arial', 14)).place(x=10, y=60)
-select_file_button.pack()
-t1.pack()
-t2.pack()
-accept_opinions.pack()
-window.mainloop()
-print(staff, month)
-data = xlrd.open_workbook(init.judge())
-table = data.sheets()[int(month)-1]
-new_table = create_table.Create(table, staff, month)
-new_table.init_table()
-new_table.creating()
+if __name__ == "__main__":
+    main()
