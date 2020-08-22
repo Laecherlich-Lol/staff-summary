@@ -25,7 +25,7 @@ accept_opinions = tkinter.Button(
 )
 
 t1 = ttk.Combobox(window,
-                  values=['o', 'd', 'p'])
+                  values=['Olaf Thomsen', 'Manfred Reyelt', 'Doris Rüdiger'])
 t2 = ttk.Combobox(window,
                   values=[months for months in range(1, 13)])
 
